@@ -47,6 +47,20 @@ The following command must be triggered before you commit your code changes.
 
 `make api-code-validation`
 
+# Testing
+
+To run the tests you have to run the following command
+
+```
+make api-tests
+```
+
+Before you can do this you have to run the following command to prepare the environment:
+
+```
+make api-setup-tests
+```
+
 ## XDebug
 
 There are Makefile commands to enable/disable Xdebug. In order for xdebug to work with PHPStorm you need to add a default RemoteDebug Configuration, and you need to add a server path mapping with the same name that is set for `PHP_IDE_CONFIG` in your .env
