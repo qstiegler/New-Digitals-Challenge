@@ -1,0 +1,43 @@
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Heroku
+/.heroku/jawsdb
+
+# Docker data
+.docker/mysql/data
+
+# .env files
+.env*
+!.env.example
+!.github/workflows/.env
+
+###> symfony/framework-bundle ###
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> friendsofphp/php-cs-fixer ###
+/.php_cs
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
+
+.phpunit
+/phpunit.xml
+.phpunit.result.cache
+/coverage
+
+.config
+~/*
+
+.DS_Store
+
+# Nginx
+.docker/nginx/*.pem

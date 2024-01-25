@@ -1,0 +1,90 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+  locale: 'de'
+
+  # Used with autowiring
+  default_sender_name: 'New Digitals'
+  default_sender_email_address: 'noreply@newdigitals-challenge.dev'
+
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    public: false       # Allows optimizing the container by removing unused services; this also means
+                        # fetching services directly from the container via $container->get() won't work.
+                        # The best practice is to be explicit about your dependencies anyway.
+
+  # Service Definition to avoid Missing Service warnings
+  App\Time\SystemClock: ~
+
+  # Interface autowiring
+  App\Time\ClockInterface: '@App\Time\SystemClock'
+  App\Service\Emails\Emails: '@App\Service\Emails\EmailsMessageQueue'
+
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  App\:
+    resource: '../src/*'
+    exclude:
+      - '../src/{DependencyInjection,Entity,Migrations,Tests,EventListener,Doctrine,Exception,Kernel.php}'
+      - '../src/**/DTO'
+      - '../src/**/ReadModel'
+      - '../src/**/ValueObject'
+      - '../src/**/Exception'
+
+  # Property normalizer has to have a negative priority, so that the custom ones run first
+  serializer.normalizer.property_normalizer:
+    class: Symfony\Component\Serializer\Normalizer\PropertyNormalizer
+    tags: [ { name: 'serializer.normalizer', priority: -50 } ]
+    arguments:
+      $propertyTypeExtractor: '@Symfony\Component\PropertyInfo\PropertyInfoExtractor'
+
+  Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor:
+    class: Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor
+
+  Symfony\Component\PropertyInfo\PropertyInfoExtractor:
+    class: Symfony\Component\PropertyInfo\PropertyInfoExtractor
+    arguments:
+      $typeExtractors:
+        - '@Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor'
+        - '@property_info.reflection_extractor'
+
+  # Backed enum normalizer must be configured to be run before the property normalizer as otherwise enums would be picked up by it
+  serializer.normalizer.backed_enum:
+    class: Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer
+    tags: [ { name: 'serializer.normalizer', priority: -40 } ]
+
+  App\Command\ResetPostgresDatabase:
+    arguments:
+      $databaseUrl: '%env(string:DATABASE_URL)%'
+      # Can't be done through the environment as it's also used on the review app
+      $isPostgresResetAvailable: '%env(bool:IS_POSTGRES_RESET_AVAILABLE)%'
+
+  # Notifications
+  App\Service\Emails\EmailsMessageQueue:
+    arguments:
+      $defaultSenderName: '%default_sender_name%'
+      $defaultSenderEmailAddress: '%default_sender_email_address%'
+      $isEmailDispatchEnabled: '%env(bool:IS_EMAIL_DISPATCH_ENABLED)%'
+
+  # Reply with empty response for options requests
+  App\EventSubscriber\OptionsRequestSubscriber:
+    tags:
+      - { name: kernel.event_subscriber }
+
+  # Add CQRS headers
+  App\EventSubscriber\CORSResponseSubscriber:
+    tags:
+      - { name: kernel.event_subscriber }
+
+  # Error handling
+  App\EventSubscriber\ExceptionTransformationSubscriber:
+    arguments:
+      $isExceptionTransformationEnabledForAllExceptions: '%env(bool:IS_EXCEPTION_TRANSFORMATION_ENABLED_FOR_ALL_EXCEPTIONS)%'
+    tags:
+      - { name: kernel.event_subscriber }

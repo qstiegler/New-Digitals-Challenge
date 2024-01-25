@@ -1,0 +1,10 @@
+{% extends '/email/base.html.twig' %}
+
+{% block title %}Product created{% endblock %}
+{% block headline %}Product created{% endblock %}
+
+{% block content %}
+  <p>
+    The product <strong>{{ productName }}</strong> has been successfully created.
+  </p>
+{% endblock %}
