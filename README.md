@@ -35,7 +35,7 @@ Every time an Entity changes (field added, field rename, index added etc.) you h
 `make doctrine-migrations-diff`
 
 which creates a new migration file. They have to be committed to the repository.
-Never change a previously created (already committed into master) migration file!
+Never change a previously created (already committed into main branch) migration file!
 
 ### Run migrations
 

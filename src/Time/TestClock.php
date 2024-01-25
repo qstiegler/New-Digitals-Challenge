@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Time;
 
-final class TestClock implements ClockInterface
+final class TestClock implements Clock
 {
     private \DateTimeImmutable $now;
 

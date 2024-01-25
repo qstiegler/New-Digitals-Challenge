@@ -7,16 +7,14 @@ services:
 
   # Service Definition to avoid Missing Service warnings
   App\Time\TestClock: ~
+  App\Test\Service\Emails\EmailsFake: ~
 
   # Interface autowiring
-  App\Time\ClockInterface: '@App\Time\TestClock'
+  App\Time\Clock: '@App\Time\TestClock'
   App\Service\Emails\Emails: '@App\Test\Service\Emails\EmailsFake'
 
   App\Test\Service\:
     resource: '../tests/Test/Service/*'
-
-  App\Test\DataFixtures\:
-    resource: '../tests/Test/DataFixtures/*'
 
   App\Test\EntityHelper\:
     resource: '../tests/Test/EntityHelper/*'

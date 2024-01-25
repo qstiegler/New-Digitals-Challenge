@@ -82,7 +82,6 @@ api-setup-tests:
 	docker-compose run --rm api php bin/console doctrine:database:drop --if-exists --force -e test
 	docker-compose run --rm api php bin/console doctrine:database:create -n -e test
 	docker-compose run --rm api php bin/console doctrine:schema:update --complete --force -e test
-	docker-compose run --rm api php bin/console doctrine:fixtures:load -e test -n
 
 ## api-tests		Run the API tests.
 .PHONY: api-tests

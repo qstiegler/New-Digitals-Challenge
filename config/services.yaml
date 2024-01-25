@@ -23,7 +23,7 @@ services:
   App\Time\SystemClock: ~
 
   # Interface autowiring
-  App\Time\ClockInterface: '@App\Time\SystemClock'
+  App\Time\Clock: '@App\Time\SystemClock'
   App\Service\Emails\Emails: '@App\Service\Emails\EmailsMessageQueue'
 
   # makes classes in src/ available to be used as services

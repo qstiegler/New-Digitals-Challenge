@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\CQRS\RequestDataTransformer;
 
-use App\Time\ClockInterface;
+use App\Time\Clock;
 use DigitalCraftsman\CQRS\RequestDataTransformer\RequestDataTransformerInterface;
 
 final readonly class AddExecutedAtDataTransformer implements RequestDataTransformerInterface
 {
     public function __construct(
-        private ClockInterface $clock,
+        private Clock $clock,
     ) {
     }
 
