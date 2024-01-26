@@ -10,7 +10,7 @@ Please follow these steps to have the default settings in place:
   127.0.0.1		www.newdigitals-challenge.dev
   ```
 - Copy the `.env.example`: `cp .env.example .env`
-- Install `mkcert` (if not already installed, including `mkcert -install` command).
+- Install `mkcert` (if not already installed, including `mkcert -install` command; If you are using Windows with WSL you can follow the instructions on <https://www.haveiplayedbowie.today/blog/posts/secure-localhost-with-mkcert/>).
 - Run `mkcert -cert-file .docker/nginx/newdigitals-challenge.dev.pem -key-file .docker/nginx/newdigitals-challenge.dev-key.pem "*.newdigitals-challenge.dev" newdigitals-challenge.dev`.
 - Run `make build` to build the docker images.
 - Run `make install` to install the composer dependencies and initialize the database.
